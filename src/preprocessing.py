@@ -20,3 +20,4 @@ def center_crop(image, crop_size=512):
         left:left + crop_size
     ]
 
+

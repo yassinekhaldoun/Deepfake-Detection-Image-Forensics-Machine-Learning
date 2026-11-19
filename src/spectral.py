@@ -1,7 +1,7 @@
 import numpy as np
 
 def hann_window_2d(h, w):
-    # Fenêtre 2D séparable : produit externe de deux fenêtres de Hann 1D
+    # Separable 2D window: outer product of two 1D Hann windows
     return np.outer(np.hanning(h), np.hanning(w))
 
 def compute_fft(image):
@@ -41,3 +41,29 @@ def high_pass_filter(fft_centered, sigma=30):
 
     # Apply the filter to the FFT
     return fft_centered * H
+
+
+def radial_profile(power):
+    h, w = power.shape
+    y, x = np.indices(power.shape)
+    r = np.hypot(x - w // 2, y - h // 2).astype(int)
+    sums = np.bincount(r.ravel(), weights=power.ravel())
+    counts = np.bincount(r.ravel())
+    return sums / np.maximum(counts, 1)
+
+
+def radial_log_profile(image, r_max=256):
+    """log10 of the radial power profile of an RGB image (Hann window applied in compute_fft).
+
+    We stop at r_max=256: beyond that, the rings are cut off by the spectrum borders.
+    """
+    power = compute_power_spectrum(compute_fft(image))
+    profile = radial_profile(power)[:r_max]
+    return np.log10(profile + 1e-12)
+
+
+def radial_slope(log_profile, r_min=5, r_max=250):
+    """Slope of log10(P) versus log10(r), fitted on [r_min, r_max)."""
+    r = np.arange(r_min, r_max)
+    slope, intercept = np.polyfit(np.log10(r), log_profile[r_min:r_max], 1)
+    return slope, intercept

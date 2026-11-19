@@ -6,7 +6,7 @@ def load_image(path):
         image=np.asarray(image.convert('RGB'), dtype=np.float32)
         return image
 
-def center_crop(image, crop_size=256):
+def center_crop(image, crop_size=512):
     h, w = image.shape[:2]
 
     if h < crop_size or w < crop_size:

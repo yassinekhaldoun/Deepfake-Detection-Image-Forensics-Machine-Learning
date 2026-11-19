@@ -1,5 +1,9 @@
 import numpy as np
 
+def hann_window_2d(h, w):
+    # Fenêtre 2D séparable : produit externe de deux fenêtres de Hann 1D
+    return np.outer(np.hanning(h), np.hanning(w))
+
 def compute_fft(image):
     # Step 1: Convert RGB image to grayscale
     image = image.astype(np.float32)
@@ -10,6 +14,8 @@ def compute_fft(image):
         0.114 * image[:, :, 2]
     )
 
+    gray = gray - gray.mean()
+    gray = gray * hann_window_2d(*gray.shape)
     # Step 2: Apply the 2D Fourier transform
     fft = np.fft.fft2(gray)
     fft=np.fft.fftshift(fft)  # Shift the zero frequency component to the center

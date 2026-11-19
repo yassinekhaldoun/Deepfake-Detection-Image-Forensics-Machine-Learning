@@ -55,18 +55,21 @@ def collect_differences(image_paths):
 
 def extract_npr_features(image: np.ndarray) -> np.ndarray:
     """
-    Extract Neighboring Pixel Relationships (NPR) features from an RGB image.
+    Extract Neighboring Pixel Relationships (NPR) features from a 512x512 RGB image.
 
     For each RGB channel and direction:
         - Compute mean, variance, skewness and kurtosis.
-        - Compute a 16-bin normalized histogram.
+        - Compute a 16-bin normalized histogram over [-255, 255].
 
     Returns:
         A feature vector of shape (180,).
     """
 
-    if image.ndim != 3 or image.shape[2] != 3:
-        raise ValueError("Input image must have shape (H, W, 3) in RGB format.")
+    if image.shape != (512, 512, 3):
+        raise ValueError("Input image must have shape (512, 512, 3).")
+
+    if image.min() < 0 or image.max() > 255:
+        raise ValueError("RGB values must be in the range [0, 255].")
 
     differences = compute_npr_differences(image)
 
@@ -86,9 +89,14 @@ def extract_npr_features(image: np.ndarray) -> np.ndarray:
             features.extend([mean, variance, skewness, kurt])
 
             # Normalized histogram.
-            hist, _ = np.histogram(diff, bins=16, density=False)
-            hist = hist / hist.sum()
+            hist, _ = np.histogram(
+                diff,
+                bins=16,
+                range=(-255, 255),
+                density=False
+            )
 
+            hist = hist / hist.sum()
             features.extend(hist)
 
     return np.asarray(features, dtype=np.float64)

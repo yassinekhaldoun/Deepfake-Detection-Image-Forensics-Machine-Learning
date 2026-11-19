@@ -3,7 +3,7 @@ import numpy as np
 
 def load_image(path):
     with Image.open(path) as image:
-        image=np.asarray(image.convert('RGB'), dtype=np.float32)
+        image=np.asarray(image.convert('RGB'))
         return image
 
 def center_crop(image, crop_size=512):

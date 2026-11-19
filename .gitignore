@@ -1,0 +1,14 @@
+# Datasets
+/data/
+/real/
+/fake/
+/datasets/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/

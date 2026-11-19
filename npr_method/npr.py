@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.append(str(PROJECT_ROOT))
+
+from src.preprocessing import load_image
 import numpy as np
 from scipy.stats import skew, kurtosis
 
@@ -26,6 +33,9 @@ def compute_npr_differences(image):
     return differences
 
 def collect_differences(image_paths):
+    if len(image_paths) == 0:
+        raise ValueError("No images found.")
+
     collected = {
         channel: {
             direction: []
@@ -44,7 +54,6 @@ def collect_differences(image_paths):
                     differences[channel][direction]
                 )
 
-    # Concatenate all image vectors
     for channel in collected:
         for direction in collected[channel]:
             collected[channel][direction] = np.concatenate(
@@ -96,7 +105,7 @@ def extract_npr_features(image: np.ndarray) -> np.ndarray:
                 density=False
             )
 
-            hist = hist / hist.sum()
+            hist = hist.astype(np.float64) / diff.size
             features.extend(hist)
 
     return np.asarray(features, dtype=np.float64)

@@ -1,8 +1,4 @@
 # Datasets
-/data/
-/real/
-/fake/
-/datasets/
 
 # Python
 __pycache__/

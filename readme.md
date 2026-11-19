@@ -267,21 +267,9 @@ All exported feature tables must use consistent image identifiers.
 
 ---
 
-## 8. Expected Deliverables
 
-- [ ] Dataset audit and preprocessing pipeline
-- [ ] Visual comparison of Real/Fake spectral signatures
-- [ ] Noise and residual statistical analysis
-- [ ] NPR feature extraction
-- [ ] RGB correlation analysis
-- [ ] Feature fusion and trained ML models
-- [ ] Evaluation metrics and ablation study
-- [ ] Working Real/Fake prediction script
-- [ ] Final presentation with observations and limitations
 
----
-
-## 9. Project Structure
+## 8. Project Structure
 
 ```text
 deepfake-project/
@@ -307,12 +295,3 @@ deepfake-project/
 
 ---
 
-## 10. Main Scientific Questions
-
-1. Which handcrafted features best distinguish real and synthetic images?
-2. Are spectral, noise, NPR and color features complementary?
-3. Does combining features improve classification compared with individual methods?
-4. Are the detected signatures genuinely related to image formation, or are they caused by dataset biases?
-5. How robust is the detector to common image transformations?
-
-**Final objective:** Build an interpretable, CPU-friendly detection system while investigating the digital traces of image generation, rather than relying on end-to-end deepfake classification.
